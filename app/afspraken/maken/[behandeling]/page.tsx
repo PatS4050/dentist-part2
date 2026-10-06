@@ -18,7 +18,8 @@ type PageProps = {
 
 export default async function TreatmentPage({params}: PageProps) {
 
-    const response = await fetch("http://localhost:3000/api/behandelingen");
+    const response = await fetch("http://localhost:3000/api/behandelingen", {cache: "force-cache",});
+
 // const response = await fetch("/api/behandelingen"); werkt blijkbaar niet
     const data = await response.json();
     const treatments = data.treatments;

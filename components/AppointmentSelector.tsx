@@ -27,7 +27,7 @@ export default function AppointmentSelector({ behandeling }: AppointmentSelector
         async function fetchTimes() {
             setLoading (true);
             const response = await fetch(
-                `/api/tijden?behandeling=${behandeling}&datum=2026-09-${String(selectedDay).padStart(2, "0")}`
+                `/api/tijden?behandeling=${behandeling}&datum=2026-09-${String(selectedDay).padStart(2, "0")}`, {cache:"no-store"}
             );
 
             const data = await response.json();
