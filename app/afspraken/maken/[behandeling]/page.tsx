@@ -8,7 +8,7 @@ type PageProps = {
     }>;
 };
 
-const times = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:30", "14:00", "14:30","15:00", "15:30", "16:00"];
+// const times = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:30", "14:00", "14:30","15:00", "15:30", "16:00"];
 
 // const treatments = [
 //     {url: 'controle', name: 'Periodieke controle'},
@@ -42,7 +42,7 @@ export default async function TreatmentPage({params}: PageProps) {
                 </p>
             </section>
 
-            <AppointmentSelector times={times}/>
+            <AppointmentSelector behandeling={behandeling}/>
 
             {/*<section className="card-container">*/}
             {/*    <article className="card">*/}

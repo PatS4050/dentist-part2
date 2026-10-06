@@ -1,13 +1,34 @@
 "use client";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 type AppointmentSelectorProps = {
-    times: string[];
+    // times: string[];
+    behandeling: string;
 };
 
-export default function AppointmentSelector({ times }: AppointmentSelectorProps) {
+export default function AppointmentSelector({ behandeling }: AppointmentSelectorProps) {
+
+    const [times, setTimes] = useState<string[]>([]);
     const [selectedDay, setSelectedDay] = useState<number | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
+    const [loading, setLoading] = useState (false);
+
+    useEffect(() => {
+        if (selectedDay === null) return;
+
+        async function fetchTimes() {
+            setLoading (true);
+            const response = await fetch(
+                `/api/tijden?behandeling=${behandeling}&datum=2026-09-${String(selectedDay).padStart(2, "0")}`
+            );
+
+            const data = await response.json();
+
+            setTimes(data.tijden);
+        }
+
+        fetchTimes();
+    }, [selectedDay, behandeling]);
 
     return (
         <div className="card-container">
