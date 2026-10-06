@@ -8,7 +8,7 @@ type PageProps = {
     }>;
 };
 
-const times = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:30", "14:00", "14:30","15:00", "15:30", "16:00"];
+// const times = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:30", "14:00", "14:30","15:00", "15:30", "16:00"];
 
 // const treatments = [
 //     {url: 'controle', name: 'Periodieke controle'},
@@ -18,7 +18,8 @@ const times = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:30", "1
 
 export default async function TreatmentPage({params}: PageProps) {
 
-    const response = await fetch("http://localhost:3000/api/behandelingen");
+    const response = await fetch("http://localhost:3000/api/behandelingen", {cache: "force-cache",});
+
 // const response = await fetch("/api/behandelingen"); werkt blijkbaar niet
     const data = await response.json();
     const treatments = data.treatments;
@@ -42,7 +43,7 @@ export default async function TreatmentPage({params}: PageProps) {
                 </p>
             </section>
 
-            <AppointmentSelector times={times}/>
+            <AppointmentSelector behandeling={behandeling}/>
 
             {/*<section className="card-container">*/}
             {/*    <article className="card">*/}

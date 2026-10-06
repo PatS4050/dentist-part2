@@ -1,13 +1,42 @@
 "use client";
-import {useState} from "react";
+import {useState, useEffect} from "react";
+import {useFormState} from "react-dom";
+import { maakAfspraakAction } from "@/app/afspraken/maken/[behandeling]/actions";
 
 type AppointmentSelectorProps = {
-    times: string[];
+    // times: string[];
+    behandeling: string;
 };
 
-export default function AppointmentSelector({ times }: AppointmentSelectorProps) {
+export default function AppointmentSelector({ behandeling }: AppointmentSelectorProps) {
+
+    const [times, setTimes] = useState<string[]>([]);
     const [selectedDay, setSelectedDay] = useState<number | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
+    const [loading, setLoading] = useState (false);
+    const [state, formAction] = useFormState(
+        maakAfspraakAction,
+        {
+            success: false,
+            error: ""
+        }
+    );
+    useEffect(() => {
+        if (selectedDay === null) return;
+
+        async function fetchTimes() {
+            setLoading (true);
+            const response = await fetch(
+                `/api/tijden?behandeling=${behandeling}&datum=2026-09-${String(selectedDay).padStart(2, "0")}`, {cache:"no-store"}
+            );
+
+            const data = await response.json();
+
+            setTimes(data.tijden);
+        }
+
+        fetchTimes();
+    }, [selectedDay, behandeling]);
 
     return (
         <div className="card-container">
@@ -50,6 +79,60 @@ export default function AppointmentSelector({ times }: AppointmentSelectorProps)
                         }
                     </div>) : (<p>Kies eerst een datum.</p>)
                 }
+                {/* FORMULIER */}
+                {selectedDay && selectedTime && (
+                    <form action={formAction}>
+                        <input
+                            type="hidden"
+                            name="behandeling"
+                            value={behandeling}
+                        />
+
+                        <input
+                            type="hidden"
+                            name="datum"
+                            value={`2026-09-${String(selectedDay).padStart(2, "0")}`}
+                        />
+
+                        <input
+                            type="hidden"
+                            name="tijd"
+                            value={selectedTime}
+                        />
+
+                        <label>
+                            Naam:
+                            <input
+                                type="text"
+                                name="naam"
+                            />
+                        </label>
+
+                        <label>
+                            E-mailadres:
+                            <input
+                                type="email"
+                                name="email"
+                            />
+                        </label>
+
+                        <button type="submit">
+                            Afspraak bevestigen
+                        </button>
+                    </form>
+                )}
+
+                {/* RESULTAAT */}
+                {state.success && (
+                    <p>
+                        U heeft een afspraak gemaakt voor{" "}
+                        {state.afspraak.datum} om {state.afspraak.tijd}.
+                    </p>
+                )}
+
+                {!state.success && state.error && (
+                    <p>{state.error}</p>
+                )}
             </article>
         </div>);
 }
