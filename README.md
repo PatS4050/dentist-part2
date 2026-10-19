@@ -1,4 +1,4 @@
-# Opdrachtbeschrijving - deel 2
+npm# Opdrachtbeschrijving - deel 2
 
 ## Inleiding
 In deel 1 heb je de basisstructuur van de website van Tandartspraktijk de Tandenborstel opgezet: routing, nested routes, een dynamic route per behandeling en een interactieve (maar nog volledig statische) kalenderwidget waarmee een bezoeker een datum en tijd kon *selecteren* — zonder dat daar verder iets mee gebeurde.

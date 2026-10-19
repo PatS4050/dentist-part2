@@ -1,43 +1,35 @@
 import Header from "@/components/Header";
 import Link from "next/link";
+import {getBehandelingen} from "@/lib/behandelingen";
 
-export default function Appointments() {
+export default async function MakeAppointment() {
+    const behandelingen = await getBehandelingen();
+
     return (
         <main className="page-container">
-            <Header icon="/logo.svg" title="Afspraken"/>
+            <Header icon="/logo.svg" title="Afspraak maken"/>
 
             <section className="intro">
-                <h2>Een afspraak maken</h2>
+                <h2>Kies een behandeling</h2>
                 <p>
-                    Wilt u een controle plannen, heeft u een klacht of wilt u meer
-                    informatie over een behandeling? Neem dan contact met ons op. Bij ernstige pijn, een afgebroken tand
-                    of een ongeval kunt u het beste direct telefonisch contact met ons opnemen.
+                    Selecteer hieronder de behandeling waarvoor u een afspraak wilt maken.
+                    Daarna kiest u een datum en een tijd.
                 </p>
             </section>
 
             <section className="card-container">
-                <article className="card">
-                    <h3>Telefonisch</h3>
-                    <p>U kunt ons tijdens openingstijden telefonisch bereiken.</p>
-                    <strong>{process.env.NEXT_PUBLIC_PRAKTIJK_TELEFOONNUMMER}</strong>
-                </article>
-
-                <article className="card">
-                    <h3>Openingstijden</h3>
-                    <p>Maandag t/m vrijdag</p>
-                    <p>08:00 - 17:00 uur</p>
-                </article>
-
-                <article className="card">
-                    <h3>Online afspraken</h3>
-                    <p>Wilt u een controle plannen of heeft u een klacht? U kunt eenvoudig een afspraak maken.</p>
-                    <Link
-                        href="/afspraken/maken"
-                        className="link-button"
-                    >
-                        Maak een afspraak
-                    </Link>
-                </article>
+                {behandelingen.map((behandeling) => (
+                    <article className="card" key={behandeling.id}>
+                        <h3>{behandeling.title}</h3>
+                        <p>{behandeling.subtitle}</p>
+                        <Link
+                            href={`/afspraken/maken/${behandeling.slug}`}
+                            className="link-button"
+                        >
+                            Maak een afspraak
+                        </Link>
+                    </article>
+                ))}
             </section>
         </main>
     );
